@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/Ar-goPage/static/css/main.9389326b.css",
+    "main.js": "/Ar-goPage/static/js/main.765409dd.js",
+    "static/js/787.c4e7f8f9.chunk.js": "/Ar-goPage/static/js/787.c4e7f8f9.chunk.js",
+    "static/media/Background.png": "/Ar-goPage/static/media/Background.031c009ada8c142bc8ea.png",
+    "static/media/logo.png": "/Ar-goPage/static/media/logo.58017bbb42d47a78e0d5.png",
+    "index.html": "/Ar-goPage/index.html",
+    "main.9389326b.css.map": "/Ar-goPage/static/css/main.9389326b.css.map",
+    "main.765409dd.js.map": "/Ar-goPage/static/js/main.765409dd.js.map",
+    "787.c4e7f8f9.chunk.js.map": "/Ar-goPage/static/js/787.c4e7f8f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9389326b.css",
+    "static/js/main.765409dd.js"
+  ]
+}
