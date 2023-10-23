@@ -8,7 +8,7 @@ require('./schema/teacher')
 require('./schema/student')
 require('./schema/reasoning')
 require('./schema/test')
-
+require ('./schema/cuestionarios')
 // Importa los controladores
 const teacherController = require('./controllers/teacherController');
 const studentController = require('./controllers/studentController');
@@ -17,8 +17,8 @@ const reasoningController = require('./controllers/reasoningController');
 const Teacher = require('./schema/teacher')
 const Student = require('./schema/student')
 const Test = require('./schema/test')
+const Cuestionario = require ('./schema/cuestionarios')
 const mongoUri= "mongodb+srv://jaime18:5LNifiVmya4G8FnF@cluster1.yndbs1l.mongodb.net/?retryWrites=true&w=majority"
-
 //login
 app.use(express.json());
 app.use(express.urlencoded({
@@ -63,10 +63,6 @@ app.post('/login', async (req, res) => {
     const password = user.password;
     const name = user.name;
     const id = user._id;
-    console.log(name);
-    console.log('hola');
-    console.log(id);
-    console.log('Valor del _id:', user._id.toString());
     // Compara la contraseña proporcionada con la contraseña almacenada en la base de datos (en texto plano)
     if (req.body.password === password) {
       // Inicia sesión al usuario
@@ -184,23 +180,38 @@ app.patch('/actualizar-propiedad/:pruebaId', async (req, res) => {
     res.status(500).json({ error: 'Ocurrió un error al actualizar la propiedad' });
   }
 });
+app.post('/agregar-cuestionario', async (req, res) => {
+  try {
+    // Crea una nueva instancia del modelo de Cuestionario con los datos del cuerpo de la solicitud
+    const nuevoCuestionario = new Cuestionario(req.body);
 
-app.post('/profesores', teacherController.crearProfesor);
-app.get('/profesores', teacherController.obtenerProfesores);
-app.put('/profesores/:id', teacherController.actualizarProfesor);
-app.delete('/profesores/:id', teacherController.eliminarProfesor);
-app.get('/profesor',teacherController.obtenerDatosProfesorPorCorreo);
-app.post('/profesor',teacherController.obtenerDatosProfesorPorCorreo);
-// Rutas para el modelo Reasoning
-app.post('/razonamiento', reasoningController.guardarReasoning);
-app.get('/razonamiento', reasoningController.obtenerReasoning);
-app.delete('/razonamiento/:id', reasoningController.eliminarReasoning);
+    // Guarda el nuevo cuestionario en la base de datos
+    await nuevoCuestionario.save();
 
-// Rutas para el modelo Student
-app.post('/estudiantes', studentController.crearStudent);
-app.get('/estudiantes', studentController.obtenerStudent);
-app.put('/estudiantes/:id', studentController.actualizarStudent);
-app.delete('/estudiantes/:id', studentController.eliminarStudent);
+    // Envía una respuesta con el nuevo cuestionario agregado
+    res.json(nuevoCuestionario);
+  } catch (error) {
+    // Manejar errores, como problemas en la base de datos
+    console.error('Error al agregar el cuestionario:', error);
+    res.status(500).json({ error: 'Error al agregar el cuestionario' });
+  }
+});
+
+app.get('/cuestionarios', async (req,res) => {
+
+  const profesorCorreo = req.query.profesorCorreo;
+  
+  try {
+    
+    const cuestionarios = await Cuestionario.find({id_teacher: profesorCorreo})
+    res.json(cuestionarios)
+  } catch (error) {
+    console.error('Error al obtener la lista de cuestionarios:', error);
+    res.status(500).json({ error: 'Error al obtener la lista de cuestionarios' });
+  }
+
+
+})
 
 app.listen(5000,()=>{
     console.log("server running")

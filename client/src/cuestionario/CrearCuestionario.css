@@ -1,0 +1,52 @@
+/* CrearCuestionario.css */
+.modal {
+    /* Estilos para el modal, como posición, fondo, tamaño y centrado en la pantalla */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    /* Estilos para el contenido del modal, incluyendo tamaño y margen interior */
+    background-color: #fff;
+    width: 80%; /* Ajusta el ancho del modal según tus necesidades */
+    max-width: 600px; /* Establece un ancho máximo si es necesario */
+    padding: 20px; /* Espacio interno para el contenido */
+  }
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .label {
+    display: inline-block;
+    width: 150px;
+    margin-right: 10px; /* Espacio entre el label y el input */
+  }
+  
+  input[type="text"] {
+    flex: 1; /* Toma el espacio restante en la fila */
+  }
+  
+  input[type="checkbox"] {
+    width: 20px; /* Ancho de la casilla de verificación */
+  }
+  
+  
+  .button-container {
+    /* Estilos para el contenedor de botones, si es necesario */
+    margin-top: 20px; /* Agrega espacio superior para separar los botones del contenido */
+  }
+  
+  .error-message {
+    color: red; /* Estilos para el mensaje de error, si es necesario */
+  }
+  

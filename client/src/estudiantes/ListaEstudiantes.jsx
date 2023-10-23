@@ -3,6 +3,9 @@ import { useLocation,useNavigate } from 'react-router-dom';
 import EditarEstudiante from './EditarEstudiante';
 import PruebasEstudiantePopup from './PruebasEstudiantePopup';
 import logo from '../login/logo.png'
+import ReactDOMServer from 'react-dom/server';
+import PdfGenerator from './PdfGenerator';
+
 
 function ListaEstudiantes() {
   const location = useLocation();
@@ -11,8 +14,9 @@ function ListaEstudiantes() {
   const [estudianteEditado, setEstudianteEditado] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedEstudianteForPruebas, setSelectedEstudianteForPruebas] = useState(null);
-  const [showPruebasPopup,setShowPruebasPopup] =useState(false)
-
+  const [showPruebasPopup,setShowPruebasPopup] =useState(false);
+  const [showPDF, setShowPDF] = useState(false); // Estado para mostrar el PDF
+  const [pdfContent, setPdfContent] = useState(null); // Contenido del PDF a mostrar
 
 
   useEffect(() => {
@@ -49,12 +53,26 @@ function ListaEstudiantes() {
     setShowModal(false);
   };
   const logout = () =>{
-    navigate('/')
+    navigate('/Ar-goPage')
   }
   const handleVerPruebasEstudiante = (estudiante) => {
     setSelectedEstudianteForPruebas(estudiante);
     setShowPruebasPopup(true);
   };
+
+  const handleVerPdf = async (estudianteId) => {
+    try {
+      const res = await fetch(`/estudiantes/${estudianteId}/pdf`);
+      const pdfBlob = await res.blob();
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      // Abre el PDF en una nueva pestaña
+      window.open(pdfUrl);
+    } catch (error) {
+      console.error('Error al obtener el PDF:', error);
+    }
+  };
+
   return (
   <div style={{backgroundColor: 'lightgray',padding: '20px',overflowY: 'auto',backgroundSize: 'cover',backgroundSize:'cover'}}>
     <h2 style={{ color: 'navy' }}>Lista de Estudiantes de {nombreProfesor}</h2>
@@ -77,6 +95,7 @@ function ListaEstudiantes() {
             <th style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>Nombre</th>
             <th style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>Curso</th>
             <th style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>Rut</th>
+            <th style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>Seguimiento</th>
             <th style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>Editar datos</th>
             <th style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>Editar pruebas</th>
           </tr>
@@ -87,6 +106,9 @@ function ListaEstudiantes() {
               <td style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>{estudiante.name_student}</td>
               <td style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>{estudiante.course}</td>
               <td style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>{estudiante.rut}</td>
+              <td style={{ border: '1px solid black', padding: '8px' }}>
+              <button onClick={() => handleVerPdf(estudiante._id)}>Ver PDF</button>
+              </td>
               <td style={{ border: '1px solid black', padding: '8px' }}>
                 <button onClick={() => handleEditarEstudiante(estudiante._id)}>Editar datos</button>
               </td>

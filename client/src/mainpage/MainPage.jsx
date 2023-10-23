@@ -15,6 +15,11 @@ function MainPage() {
       state: {correoProfesor,nombreProfesor},
     });
   }
+  const redirectToCuestionario = () => {
+    navigate('/cuestionario',{
+      state: {correoProfesor,nombreProfesor},
+    });
+  }
   return (
     <div>
       <h1>Bienvenido a la página principal {nombreProfesor}</h1>
@@ -22,6 +27,7 @@ function MainPage() {
       {/* <AgregarEstudiantes correoProfesor={correoProfesor} /> */}
       <button onClick={redirectToAddStudent}> Agregar estudiantes </button>
       <button onClick={redirectToStudentList}>Ver Lista de Estudiantes</button>
+      <button onClick={redirectToCuestionario}>Cuestionario</button>
       {/* Aquí puedes mostrar la lista de estudiantes si lo deseas */}
     </div>
   );
