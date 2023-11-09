@@ -54,33 +54,36 @@ function AgregarEstudiantes({ students, setStudents}) {
     }
   };
   return (
-    <div>
+    <div style={containerStyle}>
       <h2>Agregar Estudiantes de {nombreProfesor}</h2>
-      <div>
+      <div style={formGroupStyle}>
         <label htmlFor="nombre">Nombre:</label>
         <input
           type="text"
           id="nombre"
           value={name_student}
           onChange={(e) => setNombre(e.target.value)}
+          style={inputStyle}
         />
       </div>
-      <div>
+      <div style={formGroupStyle}>
         <label htmlFor="curso">Curso:</label>
         <input
           type="text"
           id="curso"
           value={course}
           onChange={(e) => setCurso(e.target.value)}
+          style={inputStyle}
         />
       </div>
-      <div>
+      <div style={formGroupStyle}>
         <label htmlFor="rut">RUT:</label>
         <input
           type="text"
           id="rut"
           value={rut}
           onChange={(e) => setRut(e.target.value)}
+          style={inputStyle}
         />
       </div>
       <div>
@@ -90,5 +93,45 @@ function AgregarEstudiantes({ students, setStudents}) {
     </div>
   );
 }
+const containerStyle = {
+  maxWidth: '0 auto',
+  margin: '0 auto',
+  padding: '20px',
+  border: '1px solid #ccc',
+  borderRadius: '5px',
+  backgroundColor: '#f7f7f7',
+};
 
+const formGroupStyle = {
+  margin: '10px 0',
+};
+
+const inputStyle = {
+  width: '100%',
+  padding: '8px',
+  border: '1px solid #ccc',
+  borderRadius: '5px',
+};
+
+const buttonGroupStyle = {
+  marginTop: '20px',
+};
+
+const addButtonStyle = {
+  backgroundColor: '#007bff',
+  color: '#fff',
+  padding: '10px 20px',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+};
+
+const backButtonStyle = {
+  backgroundColor: '#ccc',
+  color: '#000',
+  padding: '10px 20px',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+};
 export default AgregarEstudiantes;

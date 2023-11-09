@@ -5,7 +5,7 @@ import PruebasEstudiantePopup from './PruebasEstudiantePopup';
 import logo from '../login/logo.png'
 import ReactDOMServer from 'react-dom/server';
 import PdfGenerator from './PdfGenerator';
-
+import GeneradorPDF from './GeneradorPDF';
 
 function ListaEstudiantes() {
   const location = useLocation();
@@ -73,6 +73,10 @@ function ListaEstudiantes() {
     }
   };
 
+  const handleVerPdfHardCoded = (estudianteId, nombreAlumno) => {
+    GeneradorPDF.generatePDF(nombreAlumno);
+  };
+
   return (
   <div style={{backgroundColor: 'lightgray',padding: '20px',overflowY: 'auto',backgroundSize: 'cover',backgroundSize:'cover'}}>
     <h2 style={{ color: 'navy' }}>Lista de Estudiantes de {nombreProfesor}</h2>
@@ -107,7 +111,7 @@ function ListaEstudiantes() {
               <td style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>{estudiante.course}</td>
               <td style={{ border: '1px solid black', padding: '8px', color: 'navy' }}>{estudiante.rut}</td>
               <td style={{ border: '1px solid black', padding: '8px' }}>
-              <button onClick={() => handleVerPdf(estudiante._id)}>Ver PDF</button>
+              <button onClick={() => handleVerPdfHardCoded(estudiante._id, estudiante.name_student)}>Ver PDF</button>
               </td>
               <td style={{ border: '1px solid black', padding: '8px' }}>
                 <button onClick={() => handleEditarEstudiante(estudiante._id)}>Editar datos</button>

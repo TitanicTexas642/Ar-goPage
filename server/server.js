@@ -183,7 +183,14 @@ app.patch('/actualizar-propiedad/:pruebaId', async (req, res) => {
 app.post('/agregar-cuestionario', async (req, res) => {
   try {
     // Crea una nueva instancia del modelo de Cuestionario con los datos del cuerpo de la solicitud
-    const nuevoCuestionario = new Cuestionario(req.body);
+    const { name_test, id_teacher, questions } = req.body;
+
+    // Crea un nuevo cuestionario con las preguntas
+    const nuevoCuestionario = new Cuestionario({
+      name_test,
+      id_teacher,
+      questions,
+    });
 
     // Guarda el nuevo cuestionario en la base de datos
     await nuevoCuestionario.save();
@@ -209,9 +216,33 @@ app.get('/cuestionarios', async (req,res) => {
     console.error('Error al obtener la lista de cuestionarios:', error);
     res.status(500).json({ error: 'Error al obtener la lista de cuestionarios' });
   }
-
-
 })
+
+app.put('/cuestionarios/:cuestionarioId', async (req, res) => {
+  try {
+    const { cuestionarioId } = req.params;
+    const { name_test, choices, correctAnswers } = req.body;
+
+    // Busca el cuestionario por su ID
+    const cuestionario = await Cuestionario.findByIdAndUpdate(
+      cuestionarioId,
+      { name_test, choices, correctAnswers },
+      { new: true }
+    );
+    console.log(choices);
+    console.log(correctAnswers);
+    if (!cuestionario) {
+      return res.status(404).json({ message: 'Cuestionario no encontrado' });
+    }
+
+    return res.json(cuestionario);
+  } catch (error) {
+    console.error('Error al actualizar el cuestionario:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+// Resto de la configuración de tu aplicación...
 
 app.listen(5000,()=>{
     console.log("server running")

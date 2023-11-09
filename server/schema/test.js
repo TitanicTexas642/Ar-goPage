@@ -15,6 +15,10 @@ const TestSchema = new mongoose.Schema({
     claves:String,
     cancelacion:String,
     vocabulario:String,
+    digitos:String,
+    comprension:String,
+    simbolos:String,
+    span:String
 })
 
 

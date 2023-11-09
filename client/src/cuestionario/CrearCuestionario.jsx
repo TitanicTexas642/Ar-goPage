@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { useLocation,useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function CrearCuestionario({ onClose }) {
   const [name_test, setName_test] = useState('');
-  const [question, setQuestion] = useState('');
-  const [choices, setChoices] = useState(['', '', '', '']);
-  const [correctAnswers, setCorrectAnswers] = useState([false, false, false, false]);
+  const [questions, setQuestions] = useState([{ question: '', choices: ['', '', '', ''], correctAnswers: [false, false, false, false] }]);
   const navigate = useNavigate();
   const location = useLocation();
   const [showPopup, setShowPopup] = useState(false);
-
 
   const { correoProfesor, nombreProfesor } = location.state || {};
 
@@ -17,23 +14,30 @@ function CrearCuestionario({ onClose }) {
     setName_test(e.target.value);
   };
 
-  const handleQuestionChange = (e) => {
-    setQuestion(e.target.value);
+  const handleQuestionChange = (index, e) => {
+    const newQuestions = [...questions];
+    newQuestions[index].question = e.target.value;
+    setQuestions(newQuestions);
   };
 
-  const handleChoiceChange = (index, e) => {
-    const newChoices = [...choices];
-    newChoices[index] = e.target.value;
-    setChoices(newChoices);
+  const handleChoiceChange = (questionIndex, choiceIndex, e) => {
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].choices[choiceIndex] = e.target.value;
+    setQuestions(newQuestions);
   };
 
-  const handleCorrectAnswerChange = (index) => {
-    const newCorrectAnswers = [...correctAnswers];
-    newCorrectAnswers[index] = !newCorrectAnswers[index];
-    setCorrectAnswers(newCorrectAnswers);
+  const handleCorrectAnswerChange = (questionIndex, choiceIndex) => {
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].correctAnswers[choiceIndex] = !newQuestions[questionIndex].correctAnswers[choiceIndex];
+    setQuestions(newQuestions);
   };
+
+  const handleAddQuestion = () => {
+    setQuestions([...questions, { question: '', choices: ['', '', '', ''], correctAnswers: [false, false, false, false] }]);
+  };
+
   const handleCreate = async () => {
-    if (name_test && question && choices.every((choice) => choice.trim() !== '')) {
+    if (name_test && questions.every((q) => q.question && q.choices.every((choice) => choice.trim() !== ''))) {
       try {
         const response = await fetch('/agregar-cuestionario', {
           method: 'POST',
@@ -43,39 +47,33 @@ function CrearCuestionario({ onClose }) {
           body: JSON.stringify({
             name_test,
             id_teacher: correoProfesor,
-            question,
-            choices,
-            correctAnswers,
+            questions,
           }),
         });
 
         if (response.ok) {
-          const nuevoCuestionario = await response.json(); // Aquí obtenemos el nuevo cuestionario desde la base de datos
+          const nuevoCuestionario = await response.json();
           console.log('Cuestionario agregado:', nuevoCuestionario);
 
-          // Limpia los campos del formulario
           setName_test('');
-          setQuestion('');
-          setChoices(['', '', '', '']);
-          setCorrectAnswers([false, false, false, false]);
+          setQuestions([{ question: '', choices: ['', '', '', ''], correctAnswers: [false, false, false, false] }]);
         } else {
-          // Manejar errores de solicitud, como autenticación o errores de servidor
           console.error('Error al crear el cuestionario.');
         }
       } catch (error) {
         console.error('Error de cuenta:', error);
       }
     } else {
-      alert('Por favor, complete todos los campos.');
+      alert('Por favor, complete todos los campos en todas las preguntas.');
     }
   };
+
   const handleClose = () => {
-    // Lógica para cerrar el popup
     onClose();
   };
 
   return (
-    <div className="modal" style={{ display: 'block' }}>
+    <div className="modal" style={{ display: 'block', overflowY: 'auto', maxHeight: '80vh' }}>
       <div className="modal-content">
         <h3>Crear Cuestionario</h3>
         <form>
@@ -83,17 +81,32 @@ function CrearCuestionario({ onClose }) {
             <label>Nombre del test:</label>
             <input type="text" value={name_test} onChange={handleName_testNameChange} />
           </div>
-          <div className="input-container">
-            <label>Escriba la pregunta:</label>
-            <input type="text" value={question} onChange={handleQuestionChange} />
-          </div>
-          {choices.map((choice, index) => (
-            <div key={index} className="input-container">
-              <label>Alternativa {index + 1}:</label>
-              <input type="text" value={choice} onChange={(e) => handleChoiceChange(index, e)} />
-              <input type="checkbox" checked={correctAnswers[index]} onChange={() => handleCorrectAnswerChange(index)} />
+          {questions.map((q, questionIndex) => (
+            <div key={questionIndex}>
+              <div className="input-container">
+                <label>Pregunta {questionIndex + 1}:</label>
+                <input type="text" value={q.question} onChange={(e) => handleQuestionChange(questionIndex, e)} />
+              </div>
+              {q.choices.map((choice, choiceIndex) => (
+                <div key={choiceIndex} className="input-container">
+                  <label>Alternativa {choiceIndex + 1}:</label>
+                  <input
+                    type="text"
+                    value={choice}
+                    onChange={(e) => handleChoiceChange(questionIndex, choiceIndex, e)}
+                  />
+                  <input
+                    type="checkbox"
+                    checked={q.correctAnswers[choiceIndex]}
+                    onChange={() => handleCorrectAnswerChange(questionIndex, choiceIndex)}
+                  />
+                </div>
+              ))}
             </div>
           ))}
+          <button type="button" onClick={handleAddQuestion}>
+            Agregar Pregunta
+          </button>
           <div className="button-container">
             <button type="button" onClick={handleCreate}>
               Crear Cuestionario
@@ -101,7 +114,6 @@ function CrearCuestionario({ onClose }) {
             <button type="button" onClick={handleClose}>
               Cerrar
             </button>
-
           </div>
         </form>
       </div>
@@ -110,3 +122,4 @@ function CrearCuestionario({ onClose }) {
 }
 
 export default CrearCuestionario;
+

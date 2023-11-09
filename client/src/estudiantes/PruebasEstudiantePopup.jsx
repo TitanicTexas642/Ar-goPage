@@ -147,6 +147,38 @@ function PruebasEstudiantePopup({ estudiante,prueba, onClose}) {
                 </button>
               </td>
             </tr>
+            <tr>
+              <td><strong>Digitos</strong></td>
+              <td>
+                <button onClick={() => handleCambiarValorPrueba('digitos', pruebas[0].digitos === '0' ? '1' : '0')}>
+                  {pruebas[0].digitos === '0' ? 'Habilitar' : 'Deshabilitar'}
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Simbolos</strong></td>
+              <td>
+                <button onClick={() => handleCambiarValorPrueba('simbolos', pruebas[0].simbolos === '0' ? '1' : '0')}>
+                  {pruebas[0].simbolos === '0' ? 'Habilitar' : 'Deshabilitar'}
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Comprension</strong></td>
+              <td>
+                <button onClick={() => handleCambiarValorPrueba('comprension', pruebas[0].comprension === '0' ? '1' : '0')}>
+                  {pruebas[0].comprension === '0' ? 'Habilitar' : 'Deshabilitar'}
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Span</strong></td>
+              <td>
+                <button onClick={() => handleCambiarValorPrueba('span', pruebas[0].span === '0' ? '1' : '0')}>
+                  {pruebas[0].span === '0' ? 'Habilitar' : 'Deshabilitar'}
+                </button>
+              </td>
+            </tr>
             {/* Agrega más propiedades de la prueba aquí */}
           </tbody>
         </table>
